@@ -1,30 +1,39 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trendx/classes/post.dart';
+import 'package:trendx/main.dart' as app;
+import 'package:mocktail/mocktail.dart';
+import 'package:http/http.dart';
+import 'package:trendx/services/post_service.dart';
+import 'package:flutter/services.dart';
 
-import 'package:trendx/main.dart';
+class ClientMock extends Mock implements Client {}
+
+// flutter test test/widget_test.dart -d android -r expanded
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  final client = ClientMock();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  test("Teste carregamento dos dados: Mock", () async {
+    final service = PostService(client);
+    WidgetsFlutterBinding.ensureInitialized();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    const app.MyApp();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    when(() => client.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
+        .thenAnswer((_) async => Response(await rootBundle.loadString('test/mock.json'), 200));
+
+    final posts = await service.fetchData();
+    expect(posts, const TypeMatcher<List<Post>>());
+  });
+
+  test("Teste carregamento dos dados", () async {
+    final service = PostService(Client());
+    WidgetsFlutterBinding.ensureInitialized();
+
+    const app.MyApp();
+
+    final posts = await service.fetchData();
+    expect(posts, const TypeMatcher<List<Post>>());
   });
 }

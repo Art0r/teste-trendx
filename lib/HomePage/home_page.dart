@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:trendx/HomePage/post_list.dart';
+import 'package:trendx/services/post_service.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,26 +24,9 @@ class HomePageState extends State<HomePage> {
   );
   late List<Post> _itens;
   late List<Post> _filteredItens = <Post>[];
-
-  final _random = Random();
-
-  Future<List<Post>> fetchData() async {
-    final resPosts =
-        await http.get(Uri.parse("https://jsonplaceholder.typicode.com/posts"));
-    final parsedBodyPosts =
-        json.decode(resPosts.body).cast<Map<String, dynamic>>();
-    final resPhotos = await http
-        .get(Uri.parse("https://jsonplaceholder.typicode.com/photos"));
-    final parsedBodyPhotos =
-        json.decode(resPhotos.body).cast<Map<String, dynamic>>();
-    return parsedBodyPosts
-        .map<Post>((item) => Post.fromJson(item,
-            parsedBodyPhotos[_random.nextInt(parsedBodyPhotos.length)]["url"]))
-        .toList();
-  }
-
+  final postService = PostService(http.Client());
   void getData() async {
-    _itens = await fetchData();
+    _itens = await postService.fetchData();
     _filteredItens = List.castFrom(_itens);
   }
 
@@ -119,10 +100,10 @@ class HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: FutureBuilder<List<Post>>(
-          future: fetchData(),
+          future: postService.fetchData(),
           builder: (ctx, snap) {
             if (snap.hasError) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             }
             if (snap.connectionState == ConnectionState.done) {
               return PostList(itens: _filteredItens);
