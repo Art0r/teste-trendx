@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:trendx/HomePage/home_page.dart';
+import 'package:trendx/HomePage/post_item.dart';
+import 'package:trendx/HomePage/post_list.dart';
 import 'package:trendx/classes/post.dart';
 import 'package:trendx/main.dart' as app;
 import 'package:mocktail/mocktail.dart';
@@ -9,31 +15,50 @@ import 'package:flutter/services.dart';
 
 class ClientMock extends Mock implements Client {}
 
-// flutter test test/widget_test.dart -d android -r expanded
-
 void main() {
-  final client = ClientMock();
+  final mockClient = ClientMock();
+  group('Testando os widgets', () {
+    testWidgets('- PostItem', (WidgetTester tester) async {
+      final service = PostService(mockClient);
+      WidgetsFlutterBinding.ensureInitialized();
 
-  test("Teste carregamento dos dados: Mock", () async {
-    final service = PostService(client);
-    WidgetsFlutterBinding.ensureInitialized();
+      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
+          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/posts.json'), 200));
 
-    const app.MyApp();
+      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
+          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/photos.json'), 200));
 
-    when(() => client.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
-        .thenAnswer((_) async => Response(await rootBundle.loadString('test/mock.json'), 200));
+      final posts = await service.fetchData();
 
-    final posts = await service.fetchData();
-    expect(posts, const TypeMatcher<List<Post>>());
-  });
+      final postItem = PostItem(item: posts.first,
+        image: Image.file(File(posts.first.imgUrl),),);
 
-  test("Teste carregamento dos dados", () async {
-    final service = PostService(Client());
-    WidgetsFlutterBinding.ensureInitialized();
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: postItem,),),);
 
-    const app.MyApp();
+      final el = tester.element(find.byWidget(postItem));
+      expect(find.byElementPredicate((element) => element == el), findsOneWidget);
 
-    final posts = await service.fetchData();
-    expect(posts, const TypeMatcher<List<Post>>());
+    });
+
+    testWidgets('- PostList', (WidgetTester tester) async {
+      final service = PostService(mockClient);
+      WidgetsFlutterBinding.ensureInitialized();
+
+      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
+          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/posts.json'), 200));
+
+      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
+          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/photos.json'), 200));
+
+      final posts = await service.fetchData();
+
+      await tester.pumpWidget(
+          MaterialApp(home: Scaffold(body: PostList(itens: posts, local: true
+            ,),),),);
+
+      expect(find.byType(
+          PostItem
+        ), findsNWidgets(posts.length));
+      });
   });
 }

@@ -3,17 +3,17 @@ import 'package:trendx/PostPage/post_page.dart';
 import 'package:trendx/classes/post.dart';
 
 class PostItem extends StatelessWidget {
-  const PostItem({super.key, required this.item});
+  const PostItem({super.key, required this.item, required this.image});
   final Post item;
+  final Image image;
 
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       child: Column(
         children: [
-          Image.network(
-            item.imgUrl,
-          ),
+          image,
           Center(
             child: Text(
               item.title.substring(0, 10),
