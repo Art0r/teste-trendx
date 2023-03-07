@@ -13,7 +13,7 @@ class ClientMock extends Mock implements Client {}
 
 void main() {
   final mockClient = ClientMock();
-  group("Testes Unitários carregamento dos dados", () {
+  group("Unit tests", () {
     test("- Mock", () async {
       final service = PostService(mockClient);
       WidgetsFlutterBinding.ensureInitialized();
