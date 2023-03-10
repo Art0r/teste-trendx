@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
-import 'package:trendx/HomePage/post_item.dart';
-import "dart:math";
-import 'package:http/http.dart' as http;
+import 'package:trendx/widgets/post_item.dart';
 
 // ignore: must_be_immutable
 class PostList extends StatelessWidget {

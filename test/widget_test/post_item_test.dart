@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trendx/HomePage/post_item.dart';
+import 'package:trendx/widgets/post_item.dart';
 import '../service_mock.dart';
 
 void main() {

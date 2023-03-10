@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
 import 'package:http/http.dart' as http;
-import 'package:trendx/HomePage/post_list.dart';
+import 'package:trendx/widgets/post_list.dart';
 import 'package:trendx/services/post_service.dart';
-
+import 'package:trendx/widgets/custom_search_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final TextEditingController _controller = TextEditingController();
   Icon _myIcon = const Icon(
     Icons.search,
     color: Colors.amber,
@@ -23,8 +22,9 @@ class HomePageState extends State<HomePage> {
     style: TextStyle(color: Colors.amber, fontStyle: FontStyle.italic),
   );
   late List<Post> _itens;
-  late List<Post> _filteredItens = <Post>[];
+  late List<Post> _filteredItens;
   final postService = PostService(http.Client());
+
   void getData() async {
     _itens = await postService.fetchData();
     _filteredItens = List.castFrom(_itens);
@@ -54,30 +54,18 @@ class HomePageState extends State<HomePage> {
                       Icons.cancel,
                       color: Colors.amber,
                     );
-                    _searchBar = TextFormField(
-                      decoration: const InputDecoration(
-                        fillColor: Colors.amber,
-                        prefixIconColor: Colors.amber,
-                        prefixIcon: Icon(Icons.search),
-                        hintText: 'Buscar por postagem',
-                        hintStyle: TextStyle(color: Colors.amber),
-                      ),
-                      style: const TextStyle(
-                        color: Colors.amber,
-                      ),
-                      controller: _controller,
+                    _searchBar = CustomSearchBar(
                       onChanged: (value) {
                         setState(() {
-                          if (_controller.text.isNotEmpty) {
+                          if (value.isNotEmpty) {
                             _filteredItens = _itens.where((element) {
-                              return element.title.contains(_controller.text);
+                              return element.title.contains(value);
                             }).toList();
                           } else {
                             _filteredItens = List.castFrom(_itens);
                           }
                         });
-                      },
-                    );
+                    });
                   } else {
                     _myIcon = const Icon(
                       Icons.search,
@@ -89,7 +77,6 @@ class HomePageState extends State<HomePage> {
                           color: Colors.amber, fontStyle: FontStyle.italic),
                     );
                     setState(() {
-                      _controller.text = "";
                       _filteredItens = List.castFrom(_itens);
                     });
                   }
