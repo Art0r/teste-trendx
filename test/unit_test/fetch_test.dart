@@ -5,28 +5,20 @@ import 'package:trendx/main.dart' as app;
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart';
 import 'package:trendx/services/post_service.dart';
-import 'package:flutter/services.dart';
+import '../service_mock.dart';
 
 class ClientMock extends Mock implements Client {}
 
 // flutter test test/fetch_test.dart -d android -r expanded
 
 void main() {
-  final mockClient = ClientMock();
   group("Unit tests", () {
-    test("- Mock", () async {
-      final service = PostService(mockClient);
+    test("- Mock", () async {;
       WidgetsFlutterBinding.ensureInitialized();
 
       const app.MyApp();
 
-      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
-          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/posts.json'), 200));
-
-      when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
-          .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/photos.json'), 200));
-
-      final posts = await service.fetchData();
+      final posts = await getMockData();
       expect(posts, const TypeMatcher<List<Post>>());
     });
 

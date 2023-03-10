@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class CustomSearchBar extends StatefulWidget {
-  ValueChanged<String> onChanged;
+  final ValueChanged<String> onChanged;
 
-  CustomSearchBar({super.key, required this.onChanged });
+  const CustomSearchBar({super.key, required this.onChanged });
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();

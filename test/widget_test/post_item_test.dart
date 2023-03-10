@@ -1,15 +1,19 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trendx/widgets/post_item.dart';
+import 'package:trendx/widgets/HomePage/post_item.dart';
 import '../service_mock.dart';
 
 void main() {
-  final mockClient = ClientMock();
   testWidgets('PostItem', (WidgetTester tester) async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    final posts = await getMockData(mockClient);
+    final posts = await getMockData();
+
+    if (kDebugMode) {
+      debugPrint(posts.toString());
+    }
 
     final postItem = PostItem(item: posts.first,
       image: Image.file(File(posts.first.imgUrl),),);

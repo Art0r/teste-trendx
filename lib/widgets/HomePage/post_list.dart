@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
-import 'package:trendx/widgets/post_item.dart';
+import 'package:trendx/widgets/HomePage/post_item.dart';
 
-// ignore: must_be_immutable
 class PostList extends StatelessWidget {
-  List<Post> itens;
+  final List<Post> itens;
   final bool local;
-  PostList({super.key, required this.itens, this.local = false});
+  const PostList({super.key, required this.itens, this.local = false});
   
   @override
   Widget build(BuildContext context) {

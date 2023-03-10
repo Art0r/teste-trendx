@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trendx/PostPage/post_page.dart';
+import 'package:trendx/pages/post_page.dart';
 import 'package:trendx/classes/post.dart';
 
 class PostItem extends StatelessWidget {

@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
-import '../classes/post.dart';
 
-class PostPage extends StatelessWidget {
-  Post item;
-  PostPage({super.key, required this.item});
+import '../../classes/post.dart';
+
+class PostPageItem extends StatelessWidget {
+  final Post item;
+
+  const PostPageItem({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blueGrey.shade200,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'Trendx',
-          style: TextStyle(color: Colors.amber, fontStyle: FontStyle.italic),
-        ),
-        backgroundColor: Color(Colors.black45.value),
-      ),
-      body: Container(
+    return Container(
         padding: const EdgeInsets.all(8),
         child: Card(
           color: Colors.blueGrey.shade100,
@@ -49,7 +41,6 @@ class PostPage extends StatelessWidget {
             ]),
           ),
         ),
-      ),
-    );
+      );
   }
 }

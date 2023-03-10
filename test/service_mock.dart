@@ -6,7 +6,8 @@ import 'package:mocktail/mocktail.dart';
 
 class ClientMock extends Mock implements Client {}
 
-Future<List<Post>> getMockData(ClientMock mockClient) async {
+Future<List<Post>> getMockData() async {
+  final mockClient = ClientMock();
   final service = PostService(mockClient);
 
   when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))

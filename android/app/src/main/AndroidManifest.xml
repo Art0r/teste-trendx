@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trendx">
+    package="com.example.teste_trendx">
    <application
-        android:label="trendx"
+        android:label="teste_trendx"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

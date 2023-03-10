@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
 import 'package:http/http.dart' as http;
-import 'package:trendx/widgets/post_list.dart';
+import 'package:trendx/widgets/HomePage/post_list.dart';
 import 'package:trendx/services/post_service.dart';
-import 'package:trendx/widgets/custom_search_field.dart';
+import 'package:trendx/widgets/HomePage/custom_search_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +22,7 @@ class HomePageState extends State<HomePage> {
     style: TextStyle(color: Colors.amber, fontStyle: FontStyle.italic),
   );
   late List<Post> _itens;
-  late List<Post> _filteredItens;
+  late List<Post> _filteredItens = <Post>[];
   final postService = PostService(http.Client());
 
   void getData() async {
