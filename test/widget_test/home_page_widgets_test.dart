@@ -1,14 +1,30 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:trendx/services/post_service.dart';
 import 'package:trendx/widgets/HomePage/custom_search_field.dart';
 import 'package:trendx/widgets/HomePage/post_item.dart';
 import 'package:trendx/widgets/HomePage/post_list.dart';
-import '../utils/service_mock.dart';
+
+class ClientMock extends Mock implements Client {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  final mockClient = ClientMock();
+
+  when(() => mockClient
+          .get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
+      .thenAnswer((_) async =>
+          Response(await rootBundle.loadString('mocks/posts.json'), 200));
+
+  when(() => mockClient
+          .get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
+      .thenAnswer((_) async =>
+          Response(await rootBundle.loadString('mocks/photos.json'), 200));
+
   group('Widgets for the HomePage Test', () {
     testWidgets('CustomSearchBar', (WidgetTester tester) async {
       handleOnChanged(value) {
@@ -36,10 +52,12 @@ void main() {
     });
 
     testWidgets('PostList and PostItem', (WidgetTester tester) async {
-      final posts = await getMockData();
+      final postService = PostService(mockClient);
+      final posts = await postService.fetchData();
 
       final postsList = PostList(
         itens: posts,
+        test: true,
       );
 
       await tester.pumpWidget(

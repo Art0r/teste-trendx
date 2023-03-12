@@ -1,13 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
 import 'package:trendx/widgets/HomePage/post_list.dart';
 import 'package:trendx/services/post_service.dart';
 import 'package:trendx/widgets/HomePage/custom_search_field.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  final bool test;
-  const HomePage({super.key, this.test = false});
+  final PostService postService;
+  const HomePage({super.key, required this.postService});
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -24,10 +24,13 @@ class HomePageState extends State<HomePage> {
   );
   late List<Post> _itens;
   late List<Post> _filteredItens = <Post>[];
-  final PostService postService = PostService(http.Client());
 
   void getData() async {
-    _itens = await postService.fetchData();
+    // _itens = await widget.postService.fetchData();
+    _itens = await widget.postService.fetchData();
+    if (kDebugMode) {
+      debugPrint(_itens.toString());
+    }
     _filteredItens = List.castFrom(_itens);
   }
 
@@ -88,12 +91,16 @@ class HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: FutureBuilder<List<Post>>(
-          future: postService.fetchData(),
+          future: widget.postService.fetchData(),
           builder: (ctx, snap) {
             if (snap.hasError) {
               return const CircularProgressIndicator();
             }
-            if (snap.connectionState == ConnectionState.done) {
+            if (snap.connectionState == ConnectionState.none ||
+                snap.connectionState == ConnectionState.done) {
+              if (kDebugMode) {
+                debugPrint("ready");
+              }
               return PostList(itens: _filteredItens);
             }
             return const Center(
