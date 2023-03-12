@@ -9,8 +9,8 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
+      key: const Key('post_item'),
       child: Column(
         children: [
           image,

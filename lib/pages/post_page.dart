@@ -4,12 +4,13 @@ import '../classes/post.dart';
 
 class PostPage extends StatelessWidget {
   final Post item;
-  
+
   const PostPage({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('post_page'),
       backgroundColor: Colors.blueGrey.shade200,
       appBar: AppBar(
         centerTitle: true,
@@ -19,7 +20,10 @@ class PostPage extends StatelessWidget {
         ),
         backgroundColor: Color(Colors.black45.value),
       ),
-      body: PostPageItem(item: item)
+      body: PostPageItem(
+        item: item,
+        img: Image.network(item.imgUrl),
+      ),
     );
   }
 }

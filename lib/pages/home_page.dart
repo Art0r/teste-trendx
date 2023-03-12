@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:trendx/classes/post.dart';
-import 'package:http/http.dart' as http;
 import 'package:trendx/widgets/HomePage/post_list.dart';
 import 'package:trendx/services/post_service.dart';
 import 'package:trendx/widgets/HomePage/custom_search_field.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final bool test;
+  const HomePage({super.key, this.test = false});
 
   @override
   State<HomePage> createState() => HomePageState();
@@ -23,7 +24,7 @@ class HomePageState extends State<HomePage> {
   );
   late List<Post> _itens;
   late List<Post> _filteredItens = <Post>[];
-  final postService = PostService(http.Client());
+  final PostService postService = PostService(http.Client());
 
   void getData() async {
     _itens = await postService.fetchData();
@@ -39,6 +40,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('home_page'),
       backgroundColor: Colors.blueGrey.shade300,
       appBar: AppBar(
         centerTitle: true,
@@ -54,17 +56,16 @@ class HomePageState extends State<HomePage> {
                       Icons.cancel,
                       color: Colors.amber,
                     );
-                    _searchBar = CustomSearchBar(
-                      onChanged: (value) {
-                        setState(() {
-                          if (value.isNotEmpty) {
-                            _filteredItens = _itens.where((element) {
-                              return element.title.contains(value);
-                            }).toList();
-                          } else {
-                            _filteredItens = List.castFrom(_itens);
-                          }
-                        });
+                    _searchBar = CustomSearchBar(onChanged: (value) {
+                      setState(() {
+                        if (value.isNotEmpty) {
+                          _filteredItens = _itens.where((element) {
+                            return element.title.contains(value);
+                          }).toList();
+                        } else {
+                          _filteredItens = List.castFrom(_itens);
+                        }
+                      });
                     });
                   } else {
                     _myIcon = const Icon(

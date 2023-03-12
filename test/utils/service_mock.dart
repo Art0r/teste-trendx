@@ -10,11 +10,15 @@ Future<List<Post>> getMockData() async {
   final mockClient = ClientMock();
   final service = PostService(mockClient);
 
-  when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
-      .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/posts.json'), 200));
+  when(() => mockClient
+          .get(Uri.parse("https://jsonplaceholder.typicode.com/posts")))
+      .thenAnswer((_) async =>
+          Response(await rootBundle.loadString('mocks/posts.json'), 200));
 
-  when(() => mockClient.get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
-      .thenAnswer((_) async => Response(await rootBundle.loadString('mocks/photos.json'), 200));
+  when(() => mockClient
+          .get(Uri.parse("https://jsonplaceholder.typicode.com/photos")))
+      .thenAnswer((_) async =>
+          Response(await rootBundle.loadString('mocks/photos.json'), 200));
 
   return service.fetchData();
 }
