@@ -9,17 +9,18 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       key: const Key('post_item'),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          image,
-          Center(
-            child: Text(
+          Expanded(
+          child: image,
+          ),
+          Text(
               item.title.substring(0, 10),
               style: const TextStyle(color: Colors.amberAccent, fontSize: 20),
-            ),
-          ),
+          )
         ],
       ),
       onTap: () {
