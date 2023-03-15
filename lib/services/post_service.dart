@@ -10,17 +10,17 @@ class PostService {
 
   Future<List<Post>> fetchData() async {
     final random = Random();
-    final resPosts =
-    await client.get(Uri.parse("https://jsonplaceholder.typicode.com/posts"));
+    final resPosts = await client
+        .get(Uri.parse("https://jsonplaceholder.typicode.com/posts"));
     final parsedBodyPosts =
-    json.decode(resPosts.body).cast<Map<String, dynamic>>();
-    final resPhotos = await client.get(Uri.parse("https://jsonplaceholder.typicode.com/photos"));
+        json.decode(resPosts.body).cast<Map<String, dynamic>>();
+    final resPhotos = await client
+        .get(Uri.parse("https://jsonplaceholder.typicode.com/photos"));
     final parsedBodyPhotos =
-    json.decode(resPhotos.body).cast<Map<String, dynamic>>();
+        json.decode(resPhotos.body).cast<Map<String, dynamic>>();
     return parsedBodyPosts
         .map<Post>((item) => Post.fromJson(item,
-        parsedBodyPhotos[random.nextInt(parsedBodyPhotos.length)]["url"]))
+            parsedBodyPhotos[random.nextInt(parsedBodyPhotos.length)]["url"]))
         .toList();
   }
 }
-

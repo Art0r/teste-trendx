@@ -15,11 +15,11 @@ class PostItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-          child: image,
+            child: image,
           ),
           Text(
-              item.title.substring(0, 10),
-              style: const TextStyle(color: Colors.amberAccent, fontSize: 20),
+            item.title.substring(0, 10),
+            style: const TextStyle(color: Colors.amberAccent, fontSize: 20),
           )
         ],
       ),

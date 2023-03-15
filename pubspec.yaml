@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  network_image_mock: ^2.1.1
   mocktail:
   flutter_test:
     sdk: flutter

@@ -55,10 +55,7 @@ void main() {
       final postService = PostService(mockClient);
       final posts = await postService.fetchData();
 
-      final postsList = PostList(
-        itens: posts,
-        test: true,
-      );
+      final postsList = PostList(itens: posts);
 
       await tester.pumpWidget(
         MaterialApp(

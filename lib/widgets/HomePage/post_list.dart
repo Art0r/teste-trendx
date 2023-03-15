@@ -5,8 +5,7 @@ import 'package:trendx/widgets/HomePage/post_item.dart';
 
 class PostList extends StatelessWidget {
   final List<Post> itens;
-  final bool test;
-  const PostList({super.key, required this.itens, this.test = false});
+  const PostList({super.key, required this.itens});
 
   @override
   Widget build(BuildContext context) {
@@ -20,28 +19,6 @@ class PostList extends StatelessWidget {
           mainAxisSpacing: 20),
       itemCount: itens.length,
       itemBuilder: (context, index) {
-        late Image image;
-        if (test) {
-          image = Image.file(
-            File('mocks/24f355.png'),
-              
-          );
-        } else {
-          image = Image.network(
-            itens[index].imgUrl,
-            frameBuilder: (BuildContext context, Widget child, int? frame, bool? wasSynchronouslyLoaded) {
-              return Padding(
-                padding: const EdgeInsets.all(1.5),
-                child: child,
-              );
-            },
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return const Center(child: CircularProgressIndicator(),);
-            },
-          );
-        }
-
         return Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
@@ -50,7 +27,22 @@ class PostList extends StatelessWidget {
           ),
           child: PostItem(
             item: itens[index],
-            image: image,
+            image: Image.network(
+              itens[index].imgUrl,
+              frameBuilder: (BuildContext context, Widget child, int? frame,
+                  bool? wasSynchronouslyLoaded) {
+                return Padding(
+                  padding: const EdgeInsets.all(1.5),
+                  child: child,
+                );
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ),
         );
       },
